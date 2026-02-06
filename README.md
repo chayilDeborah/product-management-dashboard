@@ -24,14 +24,23 @@ A full-featured product management dashboard built with **Next.js 15**, **TypeSc
 ### Dashboard
 ![Dashboard](screenshots/dashboard-grid.png)
 
-### Add / Edit Product
+### Edit Product
 ![Product Modal](screenshots/edit-product.png)
 
 ### Add Product
-![Product Modal](screenshots/add-product.png)
+![Product Modal](screenshots/add-product-modal.png)
+
+### Delete Product
+![Product Modal](screenshots/delete-product.png)
 
 ### Mobile View
-![Mobile View](screenshots/mobile-view.png)
+![Mobile View](screenshots/mobile-dashboard-grid.png)
+
+## Add Mobile View
+![Mobile View](screenshots/mobile-add-product.png)
+
+## Delete Mobile View
+![Mobile View](screenshots/mobile-delete-product.png)
 
 ## Tech Stack
 
