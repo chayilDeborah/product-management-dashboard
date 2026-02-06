@@ -1,31 +1,26 @@
-# FashionHub — Product Management Dashboard
+# FashionHub-Product Management Dashboard
 
 A full-featured product management dashboard built with **Next.js 15**, **TypeScript**, and **Tailwind CSS**. Users can view, search, filter, create, edit, and delete products through an intuitive, responsive UI with real-time data powered by Supabase.
 
-> Built as a frontend technical assessment — [see requirements](./technical_assessment.md)
+##Features
 
----
-
-## ✨ Features
-
-- **Product List** — Grid and list view toggle with product cards showing name, price, stock, status, and image
-- **Pagination** — Server-side pagination with page numbers, previous/next navigation, and smart ellipsis
+- **Product List** : Grid and list view toggle with product cards showing name, price, stock, status, and image
+- **Pagination** : Server-side pagination with page numbers, previous/next navigation, and smart ellipsis
 - **Search** — Debounced (300ms) search by product name to minimize unnecessary API calls
-- **Category Filtering** — Filter products by category via dropdown; supports multi-category products
-- **Create / Edit Modal** — Shared modal form for adding new products and editing existing ones
-- **Delete Confirmation** — Confirmation dialog with clear warning before permanently removing a product
-- **Product Details** — Read-only detail modal showing full product information
-- **Form Validation** — Schema-based validation using Zod with inline error messages
-- **Authentication** — Sign-in flow with Supabase Auth and protected dashboard route
-- **Responsive Design** — Fully responsive layout across mobile, tablet, and desktop
-- **Accessibility** — ARIA attributes, focus management, keyboard navigation, semantic HTML
+- **Category Filtering** : Filter products by category via dropdown; supports multi-category products
+- **Create / Edit Modal** : Shared modal form for adding new products and editing existing ones
+- **Delete Confirmation** : Confirmation dialog with clear warning before permanently removing a product
+- **Product Details** : Read-only detail modal showing full product information
+- **Form Validation** : Schema-based validation using Zod with inline error messages
+- **Authentication** : Sign-in flow with Supabase Auth and protected dashboard route
+- **Responsive Design** : Fully responsive layout across mobile, tablet, and desktop
+- **Accessibility** : ARIA attributes, focus management, keyboard navigation, semantic HTML
 
----
+##Screenshots
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
-|---|---|
 | Framework | [Next.js 15](https://nextjs.org/) (App Router) |
 | Language | [TypeScript](https://www.typescriptlang.org/) |
 | Styling | [Tailwind CSS v4](https://tailwindcss.com/) |
@@ -37,7 +32,7 @@ A full-featured product management dashboard built with **Next.js 15**, **TypeSc
 
 ---
 
-## 📁 Project Structure
+##Project Structure
 
 ```
 ├── app/
@@ -74,9 +69,7 @@ A full-featured product management dashboard built with **Next.js 15**, **TypeSc
 └── public/                       # Static assets
 ```
 
----
-
-## 🚀 Getting Started
+##Getting Started
 
 ### Prerequisites
 
@@ -115,7 +108,6 @@ Create the following tables in your Supabase project:
 **Products table:**
 
 | Column | Type | Notes |
-|---|---|---|
 | id | int8 (primary key) | Auto-generated |
 | name | text | Required |
 | description | text | Required |
@@ -142,7 +134,7 @@ Create the following tables in your Supabase project:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) — you'll be redirected to the sign-in page.
+Open https://product-management-dashboard-r3ov.vercel.app/ — you'll be redirected to the sign-in page.
 
 ### 6. Build for production
 
@@ -153,30 +145,27 @@ npm start
 
 ---
 
-## 🔑 Test Credentials
+## Test Credentials
 
 | Field | Value |
-|---|---|
 | Email | `productmgt@gmail.com` |
 | Password | `test123` |
 
 These are displayed on the sign-in page for convenience.
 
----
-
-## 📐 Technical Decisions
+## Technical Decisions
 
 ### Why Supabase REST API instead of a mock API?
 
-The assessment allows mock APIs, but using Supabase gives a **real PostgreSQL database** with proper CRUD persistence, server-side pagination via `content-range` headers, and built-in authentication — making the project more realistic and production-like.
+The assessment allows mock APIs, but using Supabase gives a **real PostgreSQL database** with proper CRUD persistence, server-side pagination via `content-range` headers, and built-in authentication, making the project more realistic and production-like, then mockapi.io requires subscription, whereas Supabase is free. 
 
 ### Why React Query over Redux or Context for data?
 
-React Query is purpose-built for **server state management** — it handles caching, background refetching, optimistic updates, and loading/error states out of the box. Redux would add unnecessary boilerplate for a data-fetching use case. Context API is used separately for **client state** (authentication).
+React Query is purpose-built for **server state management**: it handles caching, background refetching, optimistic updates, and loading/error states out of the box. Redux would add unnecessary boilerplate for a data-fetching use case. Context API is used separately for **client state** (authentication).
 
 ### Why Zod + React Hook Form?
 
-Zod provides **type-safe schema validation** that integrates seamlessly with TypeScript. Paired with React Hook Form, it delivers performant forms (no unnecessary re-renders) with automatic type inference from the schema — write the schema once, get validation + types for free.
+Zod provides **type-safe schema validation** that integrates seamlessly with TypeScript. Paired with React Hook Form, it delivers performant forms (no unnecessary re-renders) with automatic type inference from the schema, write the schema once, get validation + types for free.
 
 ### Why `useCallback` + `React.memo` on product cards?
 
@@ -188,9 +177,8 @@ Firing an API request on every keystroke would create unnecessary network traffi
 
 ### Routing & Auth flow
 
-The root route (`/`) checks auth state and redirects: unauthenticated users go to `/sign-in`, authenticated users go to `/dashboard`. This ensures the **sign-in page is always the first thing new users see** — no flash of protected content.
+The root route (`/`) checks auth state and redirects: unauthenticated users go to `/sign-in`, authenticated users go to `/dashboard`. This ensures the **sign-in page is always the first thing new users see**, no flash of protected content.
 
----
-## 📄 License
+## License
 
 This project was built as a frontend technical assessment.
