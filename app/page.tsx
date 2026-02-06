@@ -261,6 +261,15 @@ export default function Home() {
 				productName={selectedProduct?.name || ""}
 				isLoading={deleteProduct.isPending}
 			/>
+
+			<ProductDetails
+				isOpen={isDetailsOpen}
+				onClose={() => {
+					setIsDetailsOpen(false);
+					setSelectedProduct(null);
+				}}
+				product={selectedProduct}
+			/>
 		</div>
 	);
 }
