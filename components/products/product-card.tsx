@@ -1,7 +1,9 @@
 "use client";
 
+import { memo } from "react";
+import Image from "next/image";
 import { Product } from "@/types/product";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2, ImageOff } from "lucide-react";
 
 interface ProductCardProps {
 	product: Product;
@@ -11,7 +13,7 @@ interface ProductCardProps {
 	viewMode?: "grid" | "list";
 }
 
-export function ProductCard({
+export const ProductCard = memo(function ProductCard({
 	product,
 	onView,
 	onEdit,
@@ -20,151 +22,232 @@ export function ProductCard({
 }: ProductCardProps) {
 	if (viewMode === "list") {
 		return (
-			<div className="bg-[#1E293B] rounded-2xl p-5 border border-[#334155] hover:border-[#475569] transition-all duration-200">
-				<div className="flex items-center gap-6">
-					<div className="w-24 h-24 bg-[#334155] rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
-						{product.image}
+			<article
+				className="bg-white rounded-xl border border-[#EBEBEB] transition-all duration-200 hover:shadow-[0_6px_16px_rgba(0,0,0,0.12)] group"
+				aria-label={`Product: ${product.name}`}
+			>
+				<div className="flex items-center gap-5 p-4">
+					<div className="w-20 h-20 bg-[#F7F7F7] rounded-xl flex items-center justify-center shrink-0 overflow-hidden relative">
+						{product.image ? (
+							<Image
+								src={product.image}
+								alt={product.name}
+								fill
+								className="object-cover"
+								sizes="80px"
+							/>
+						) : (
+							<ImageOff
+								className="w-6 h-6 text-[#B0B0B0]"
+								aria-hidden="true"
+							/>
+						)}
 					</div>
+
 					<div className="flex-1 min-w-0">
-						<h3 className="text-white text-lg font-semibold mb-2 truncate">
+						<h3 className="text-[#222222] text-base font-semibold mb-1 truncate">
 							{product.name}
 						</h3>
-						<div className="flex gap-2 mb-2">
-							<span className="px-3 py-1 bg-[#1E40AF] text-blue-200 text-xs font-medium rounded-md">
+						<div className="flex items-center gap-2 mb-1">
+							<span className="text-[#717171] text-sm">
 								{product.category || "Uncategorized"}
 							</span>
+							<span className="text-[#DDDDDD]" aria-hidden="true">
+								·
+							</span>
 							<span
-								className={`px-3 py-1 text-xs font-medium rounded-md ${
+								className={`text-sm font-medium ${
 									product.status === "active"
-										? "bg-[#059669] text-green-200"
-										: "bg-[#64748B] text-gray-200"
+										? "text-[#008A05]"
+										: "text-[#717171]"
 								}`}
 							>
-								{product.status}
+								{product.status === "active"
+									? "Active"
+									: product.status}
 							</span>
 						</div>
 						{product.description && (
-							<p className="text-gray-400 text-sm line-clamp-1">
+							<p className="text-[#717171] text-sm line-clamp-1">
 								{product.description}
 							</p>
 						)}
 					</div>
-					<div className="flex items-center gap-8 shrink-0">
-						<div>
-							<p className="text-gray-400 text-xs mb-1">Price</p>
-							<p className="text-[#60A5FA] text-xl font-bold">
-								${product.price.toFixed(2)}
+
+					<div className="flex items-center gap-6 shrink-0">
+						<div className="text-right">
+							<p className="text-[#717171] text-xs mb-0.5">
+								Price
+							</p>
+							<p className="text-[#222222] text-lg font-semibold">
+								₦{product.price.toFixed(2)}
 							</p>
 						</div>
-						<div>
-							<p className="text-gray-400 text-xs mb-1">Stock</p>
+						<div className="text-right">
+							<p className="text-[#717171] text-xs mb-0.5">
+								Stock
+							</p>
 							<p
-								className={`text-xl font-bold ${
+								className={`text-lg font-semibold ${
 									product.stock > 10
-										? "text-[#34D399]"
-										: "text-[#F87171]"
+										? "text-[#008A05]"
+										: product.stock > 0
+											? "text-[#C13515]"
+											: "text-[#C13515]"
 								}`}
 							>
 								{product.stock}
 							</p>
 						</div>
 					</div>
-					<div className="flex gap-2 shrink-0">
+
+					<div
+						className="flex gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+						role="group"
+						aria-label={`Actions for ${product.name}`}
+					>
 						<button
 							onClick={() => onView?.(product)}
-							className="w-9 h-9 rounded-lg bg-[#1E40AF] hover:bg-[#1E3A8A] flex items-center justify-center transition-colors"
-							title="View details"
+							className="w-8 h-8 rounded-full hover:bg-[#F7F7F7] flex items-center justify-center transition-colors"
+							aria-label={`View details for ${product.name}`}
 						>
-							<Eye className="w-4 h-4 text-white" />
+							<Eye
+								className="w-4 h-4 text-[#222222]"
+								aria-hidden="true"
+							/>
 						</button>
 						<button
 							onClick={() => onEdit?.(product)}
-							className="w-9 h-9 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] flex items-center justify-center transition-colors"
-							title="Edit product"
+							className="w-8 h-8 rounded-full hover:bg-[#F7F7F7] flex items-center justify-center transition-colors"
+							aria-label={`Edit ${product.name}`}
 						>
-							<Pencil className="w-4 h-4 text-white" />
+							<Pencil
+								className="w-4 h-4 text-[#222222]"
+								aria-hidden="true"
+							/>
 						</button>
 						<button
 							onClick={() => onDelete?.(product)}
-							className="w-9 h-9 rounded-lg bg-[#DC2626] hover:bg-[#B91C1C] flex items-center justify-center transition-colors"
-							title="Delete product"
+							className="w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center transition-colors"
+							aria-label={`Delete ${product.name}`}
 						>
-							<Trash2 className="w-4 h-4 text-white" />
+							<Trash2
+								className="w-4 h-4 text-[#C13515]"
+								aria-hidden="true"
+							/>
 						</button>
 					</div>
 				</div>
-			</div>
+			</article>
 		);
 	}
 
 	return (
-		<div className="bg-[#1E293B] rounded-2xl p-5 border border-[#334155] hover:border-[#475569] transition-all duration-200">
-			<div className="flex items-start justify-between mb-4">
-				<div className="w-20 h-20 bg-[#334155] rounded-2xl flex items-center justify-center overflow-hidden">
-					{product.image}
-				</div>
-				<div className="flex gap-2">
+		<article
+			className="bg-white rounded-xl overflow-hidden border border-[#EBEBEB] transition-all duration-200 hover:shadow-[0_6px_16px_rgba(0,0,0,0.12)] group"
+			aria-label={`Product: ${product.name}`}
+		>
+			<div className="relative w-full aspect-4/3 bg-[#F7F7F7] overflow-hidden">
+				{product.image ? (
+					<Image
+						src={product.image}
+						alt={product.name}
+						fill
+						className="object-cover group-hover:scale-105 transition-transform duration-300"
+						sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+					/>
+				) : (
+					<div className="w-full h-full flex items-center justify-center">
+						<ImageOff
+							className="w-10 h-10 text-[#B0B0B0]"
+							aria-hidden="true"
+						/>
+					</div>
+				)}
+				<div
+					className="absolute top-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
+					role="group"
+					aria-label={`Actions for ${product.name}`}
+				>
 					<button
 						onClick={() => onView?.(product)}
-						className="w-9 h-9 rounded-lg bg-[#1E40AF] hover:bg-[#1E3A8A] flex items-center justify-center transition-colors"
-						title="View details"
+						className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white flex items-center justify-center transition-colors shadow-sm"
+						aria-label={`View details for ${product.name}`}
 					>
-						<Eye className="w-4 h-4 text-white" />
+						<Eye
+							className="w-4 h-4 text-[#222222]"
+							aria-hidden="true"
+						/>
 					</button>
 					<button
 						onClick={() => onEdit?.(product)}
-						className="w-9 h-9 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] flex items-center justify-center transition-colors"
-						title="Edit product"
+						className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white flex items-center justify-center transition-colors shadow-sm"
+						aria-label={`Edit ${product.name}`}
 					>
-						<Pencil className="w-4 h-4 text-white" />
+						<Pencil
+							className="w-4 h-4 text-[#222222]"
+							aria-hidden="true"
+						/>
 					</button>
 					<button
 						onClick={() => onDelete?.(product)}
-						className="w-9 h-9 rounded-lg bg-[#DC2626] hover:bg-[#B91C1C] flex items-center justify-center transition-colors"
-						title="Delete product"
+						className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white flex items-center justify-center transition-colors shadow-sm"
+						aria-label={`Delete ${product.name}`}
 					>
-						<Trash2 className="w-4 h-4 text-white" />
+						<Trash2
+							className="w-4 h-4 text-[#C13515]"
+							aria-hidden="true"
+						/>
 					</button>
+				</div>
+
+				<div className="absolute top-3 left-3">
+					<span
+						className={`px-2.5 py-1 text-xs font-semibold rounded-full ${
+							product.status === "active"
+								? "bg-white/90 backdrop-blur-sm text-[#008A05]"
+								: "bg-white/90 backdrop-blur-sm text-[#717171]"
+						}`}
+					>
+						{product.status === "active"
+							? "Active"
+							: product.status}
+					</span>
 				</div>
 			</div>
 
-			<h3 className="text-white text-lg font-semibold mb-3 line-clamp-1">
-				{product.name}
-			</h3>
-			<div className="flex gap-2 mb-4">
-				<span className="px-3 py-1 bg-[#1E40AF] text-blue-200 text-xs font-medium rounded-md">
-					{product.category || "Uncategorized"}
-				</span>
-				<span
-					className={`px-3 py-1 text-xs font-medium rounded-md ${
-						product.status === "active"
-							? "bg-[#059669] text-green-200"
-							: "bg-[#64748B] text-gray-200"
-					}`}
-				>
-					{product.status}
-				</span>
-			</div>
-			<div className="flex items-center justify-between pt-4 border-t border-[#334155]">
-				<div>
-					<p className="text-gray-400 text-xs mb-1">Price</p>
-					<p className="text-[#60A5FA] text-xl font-bold">
-						${product.price.toFixed(2)}
-					</p>
+			<div className="p-4">
+				<div className="flex items-start justify-between mb-1">
+					<h3 className="text-[#222222] text-[15px] font-semibold line-clamp-1 flex-1">
+						{product.name}
+					</h3>
 				</div>
-				<div className="text-right">
-					<p className="text-gray-400 text-xs mb-1">Stock</p>
+
+				<p className="text-[#717171] text-sm mb-3">
+					{product.category || "Uncategorized"}
+				</p>
+
+				<div className="flex items-center justify-between">
+					<p className="text-[#222222] text-[15px]">
+						<span className="font-semibold">
+							₦{product.price.toFixed(2)}
+						</span>
+					</p>
 					<p
-						className={`text-xl font-bold ${
+						className={`text-sm font-medium ${
 							product.stock > 10
-								? "text-[#34D399]"
-								: "text-[#F87171]"
+								? "text-[#008A05]"
+								: product.stock > 0
+									? "text-[#C13515]"
+									: "text-[#C13515]"
 						}`}
 					>
-						{product.stock}
+						{product.stock} in stock
 					</p>
 				</div>
 			</div>
-		</div>
+		</article>
 	);
-}
+});
+
+ProductCard.displayName = "ProductCard";

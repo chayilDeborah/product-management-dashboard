@@ -21,25 +21,28 @@ export function DeleteConfirmation({
 }: DeleteConfirmationProps) {
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} className="max-w-md">
-			<div className="text-center">
-				<div className="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
-					<AlertTriangle className="w-6 h-6 text-red-600" />
+			<div className="text-center" role="alert">
+				<div className="mx-auto w-12 h-12 bg-[#FFF8F6] rounded-full flex items-center justify-center mb-4">
+					<AlertTriangle
+						className="w-6 h-6 text-[#C13515]"
+						aria-hidden="true"
+					/>
 				</div>
 
-				<h3 className="text-lg font-semibold text-gray-900 mb-2">
+				<h3 className="text-lg font-semibold text-[#222222] mb-2">
 					Delete Product
 				</h3>
 
-				<p className="text-gray-600 mb-1">
+				<p className="text-[#717171] mb-1">
 					Are you sure you want to delete
 				</p>
-				<p className="text-gray-900 font-semibold mb-4">
-					&ldquo;{productName}&ldquo;?
+				<p className="text-[#222222] font-semibold mb-4">
+					&ldquo;{productName}&rdquo;?
 				</p>
 
-				<div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-6">
-					<p className="text-red-800 text-sm flex items-center justify-center gap-2">
-						<AlertTriangle className="w-4 h-4" />
+				<div className="bg-[#FFF8F6] border border-[#C13515]/20 rounded-lg p-3 mb-6">
+					<p className="text-[#C13515] text-sm flex items-center justify-center gap-2">
+						<AlertTriangle className="w-4 h-4" aria-hidden="true" />
 						This action cannot be undone
 					</p>
 				</div>

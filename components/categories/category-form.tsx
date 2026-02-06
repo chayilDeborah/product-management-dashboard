@@ -47,7 +47,7 @@ export function CategoryForm({
 		},
 	});
 
-	// Auto-generate slug from name
+	// auto-generate slug from name
 	const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		const slug = value
@@ -76,7 +76,7 @@ export function CategoryForm({
 				<div>
 					<label
 						htmlFor="name"
-						className="block text-sm font-medium text-[#2B2B2B] mb-2"
+						className="block text-sm font-medium text-[#222222] mb-2"
 					>
 						Category Name
 					</label>
@@ -91,7 +91,7 @@ export function CategoryForm({
 						className="h-11"
 					/>
 					{errors.name && (
-						<p className="text-red-500 text-xs mt-1">
+						<p role="alert" className="text-[#C13515] text-xs mt-1">
 							{errors.name.message}
 						</p>
 					)}
@@ -100,7 +100,7 @@ export function CategoryForm({
 				<div>
 					<label
 						htmlFor="slug"
-						className="block text-sm font-medium text-[#2B2B2B] mb-2"
+						className="block text-sm font-medium text-[#222222] mb-2"
 					>
 						Slug
 					</label>
@@ -111,11 +111,11 @@ export function CategoryForm({
 						className="h-11 font-mono text-sm"
 					/>
 					{errors.slug && (
-						<p className="text-red-500 text-xs mt-1">
+						<p role="alert" className="text-[#C13515] text-xs mt-1">
 							{errors.slug.message}
 						</p>
 					)}
-					<p className="text-xs text-[#6B6B6B] mt-1">
+					<p className="text-xs text-[#717171] mt-1">
 						Auto-generated from name, or customize it
 					</p>
 				</div>

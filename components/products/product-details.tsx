@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { Product } from "@/types/product";
 import { Modal } from "@/components/ui/modal";
-import { X } from "lucide-react";
+import { ImageOff } from "lucide-react";
 
 interface ProductDetailsProps {
 	isOpen: boolean;
@@ -18,91 +19,104 @@ export function ProductDetails({
 	if (!product) return null;
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} className="max-w-2xl">
-			<div className="flex items-center justify-between mb-6 -mt-6 -mx-6 px-6 py-4 bg-[#334155] rounded-t-2xl">
-				<h2 className="text-2xl font-bold text-[#60A5FA]">
-					Product Details
-				</h2>
-				<button
-					onClick={onClose}
-					className="text-gray-400 hover:text-white transition-colors p-1 hover:bg-red-600 rounded-lg"
-				>
-					<X className="w-5 h-5" />
-				</button>
-			</div>
-
+		<Modal
+			isOpen={isOpen}
+			onClose={onClose}
+			className="max-w-2xl"
+			title="Product Details"
+		>
 			<div className="space-y-6">
 				<div className="flex justify-center">
-					<div className="w-32 h-32 bg-[#334155] rounded-2xl flex items-center justify-center overflow-hidden">
-						{product.image}
+					<div className="w-full h-56 bg-[#F7F7F7] rounded-xl flex items-center justify-center overflow-hidden relative">
+						{product.image ? (
+							<Image
+								src={product.image}
+								alt={product.name}
+								fill
+								className="object-cover"
+								sizes="(max-width: 672px) 100vw, 672px"
+							/>
+						) : (
+							<ImageOff
+								className="w-12 h-12 text-[#B0B0B0]"
+								aria-hidden="true"
+							/>
+						)}
 					</div>
 				</div>
+
 				<div>
-					<p className="text-gray-400 text-sm mb-1">Product Name</p>
-					<h3 className="text-white text-2xl font-bold">
+					<h3 className="text-[#222222] text-2xl font-semibold mb-1">
 						{product.name}
 					</h3>
+					<p className="text-[#717171] text-sm">
+						{product.category || "Uncategorized"}
+					</p>
 				</div>
+
 				{product.description && (
 					<div>
-						<p className="text-gray-400 text-sm mb-1">
+						<p className="text-[#717171] text-xs font-medium uppercase tracking-wide mb-1">
 							Description
 						</p>
-						<p className="text-gray-300 text-base">
+						<p className="text-[#222222] text-sm leading-relaxed">
 							{product.description}
 						</p>
 					</div>
 				)}
 
-				<div className="grid grid-cols-2 gap-6">
+				<div className="grid grid-cols-2 gap-4 p-4 bg-[#F7F7F7] rounded-xl">
 					<div>
-						<p className="text-gray-400 text-sm mb-2">Category</p>
-						<p className="text-white text-lg font-semibold">
-							{product.category || "Uncategorized"}
+						<p className="text-[#717171] text-xs font-medium uppercase tracking-wide mb-1">
+							Price
+						</p>
+						<p className="text-[#222222] text-2xl font-semibold">
+							₦{product.price.toFixed(2)}
 						</p>
 					</div>
 					<div>
-						<p className="text-gray-400 text-sm mb-2">Status</p>
-						<p className="text-white text-lg font-semibold">
-							{product.status}
+						<p className="text-[#717171] text-xs font-medium uppercase tracking-wide mb-1">
+							Stock
 						</p>
-					</div>
-				</div>
-				<div className="grid grid-cols-2 gap-6">
-					<div>
-						<p className="text-gray-400 text-sm mb-2">Price</p>
-						<p className="text-[#60A5FA] text-3xl font-bold">
-							${product.price.toFixed(2)}
-						</p>
-					</div>
-					<div>
-						<p className="text-gray-400 text-sm mb-2">Stock</p>
 						<p
-							className={`text-3xl font-bold ${
+							className={`text-2xl font-semibold ${
 								product.stock > 10
-									? "text-[#34D399]"
-									: "text-[#F87171]"
+									? "text-[#008A05]"
+									: "text-[#C13515]"
 							}`}
 						>
 							{product.stock}
 						</p>
 					</div>
-				</div>
-				{product.created_at && (
 					<div>
-						<p className="text-gray-400 text-sm mb-1">Created</p>
-						<p className="text-gray-300 text-base">
-							{new Date(product.created_at).toLocaleDateString(
-								"en-US",
-								{
-									year: "numeric",
-									month: "long",
-									day: "numeric",
-								},
-							)}
+						<p className="text-[#717171] text-xs font-medium uppercase tracking-wide mb-1">
+							Status
+						</p>
+						<p
+							className={`text-base font-semibold ${product.status === "active" ? "text-[#008A05]" : "text-[#717171]"}`}
+						>
+							{product.status === "active"
+								? "Active"
+								: product.status}
 						</p>
 					</div>
-				)}
+					{product.created_at && (
+						<div>
+							<p className="text-[#717171] text-xs font-medium uppercase tracking-wide mb-1">
+								Created
+							</p>
+							<p className="text-[#222222] text-base font-medium">
+								{new Date(
+									product.created_at,
+								).toLocaleDateString("en-US", {
+									year: "numeric",
+									month: "short",
+									day: "numeric",
+								})}
+							</p>
+						</div>
+					)}
+				</div>
 			</div>
 		</Modal>
 	);
