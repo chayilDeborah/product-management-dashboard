@@ -16,7 +16,22 @@ A full-featured product management dashboard built with **Next.js 15**, **TypeSc
 - **Responsive Design** : Fully responsive layout across mobile, tablet, and desktop
 - **Accessibility** : ARIA attributes, focus management, keyboard navigation, semantic HTML
 
-##Screenshots
+## Screenshots
+
+### Login Page
+![Login Page](screenshots/sign-in.png)
+
+### Dashboard
+![Dashboard](screenshots/dashboard-grid.png)
+
+### Add / Edit Product
+![Product Modal](screenshots/edit-product.png)
+
+### Add Product
+![Product Modal](screenshots/add-product.png)
+
+### Mobile View
+![Mobile View](screenshots/mobile-view.png)
 
 ## Tech Stack
 
