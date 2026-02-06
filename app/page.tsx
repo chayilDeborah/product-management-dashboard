@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -241,6 +240,16 @@ export default function Home() {
 					</div>
 				)}
 			</div>
+			<ProductForm
+				isOpen={isFormOpen}
+				onClose={() => {
+					setIsFormOpen(false);
+					setSelectedProduct(null);
+				}}
+				onSubmit={handleFormSubmit}
+				product={selectedProduct}
+				isLoading={createProduct.isPending || updateProduct.isPending}
+			/>
 		</div>
 	);
 }
