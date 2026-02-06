@@ -1,29 +1,32 @@
 import { Product, ProductFormData, Category } from "@/types/product";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-const headers: Record<string, string> = {
-	apikey: SUPABASE_KEY,
-	Authorization: `Bearer ${SUPABASE_KEY}`,
-	"Content-Type": "application/json",
-	Prefer: "return=representation",
-};
+function getConfig() {
+	const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+	const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+	return {
+		url,
+		headers: {
+			apikey: key,
+			Authorization: `Bearer ${key}`,
+			"Content-Type": "application/json",
+			Prefer: "return=representation",
+		} as Record<string, string>,
+	};
+}
 
 export const categoriesApi = {
 	getAll: async (): Promise<Category[]> => {
-		const response = await fetch(
-			`${SUPABASE_URL}/rest/v1/categories?select=*`,
-			{
-				headers,
-			},
-		);
+		const { url, headers } = getConfig();
+		const response = await fetch(`${url}/rest/v1/categories?select=*`, {
+			headers,
+		});
 		if (!response.ok) throw new Error("Failed to fetch categories");
 		return response.json();
 	},
 
 	create: async (data: { name: string; slug: string }): Promise<Category> => {
-		const response = await fetch(`${SUPABASE_URL}/rest/v1/categories`, {
+		const { url, headers } = getConfig();
+		const response = await fetch(`${url}/rest/v1/categories`, {
 			method: "POST",
 			headers,
 			body: JSON.stringify({ ...data, status: "active" }),
@@ -49,9 +52,10 @@ export const productsApi = {
 		search?: string;
 		category?: string;
 	}): Promise<PaginatedResponse<Product>> => {
+		const { url: baseUrl, headers } = getConfig();
 		const page = params?.page || 1;
 		const limit = params?.limit || 12;
-		let url = `${SUPABASE_URL}/rest/v1/products?select=*`;
+		let url = `${baseUrl}/rest/v1/products?select=*`;
 
 		if (params?.search) {
 			url += `&name=ilike.*${params.search}*`;
@@ -91,8 +95,9 @@ export const productsApi = {
 	},
 
 	getById: async (id: number): Promise<Product> => {
+		const { url, headers } = getConfig();
 		const response = await fetch(
-			`${SUPABASE_URL}/rest/v1/products?id=eq.${id}&select=*`,
+			`${url}/rest/v1/products?id=eq.${id}&select=*`,
 			{ headers },
 		);
 		if (!response.ok) throw new Error("Failed to fetch product");
@@ -101,7 +106,8 @@ export const productsApi = {
 	},
 
 	create: async (data: ProductFormData): Promise<Product> => {
-		const response = await fetch(`${SUPABASE_URL}/rest/v1/products`, {
+		const { url, headers } = getConfig();
+		const response = await fetch(`${url}/rest/v1/products`, {
 			method: "POST",
 			headers,
 			body: JSON.stringify(data),
@@ -112,27 +118,23 @@ export const productsApi = {
 	},
 
 	update: async (id: number, data: ProductFormData): Promise<Product> => {
-		const response = await fetch(
-			`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`,
-			{
-				method: "PATCH",
-				headers,
-				body: JSON.stringify(data),
-			},
-		);
+		const { url, headers } = getConfig();
+		const response = await fetch(`${url}/rest/v1/products?id=eq.${id}`, {
+			method: "PATCH",
+			headers,
+			body: JSON.stringify(data),
+		});
 		if (!response.ok) throw new Error("Failed to update product");
 		const result = await response.json();
 		return result[0];
 	},
 
 	delete: async (id: number): Promise<void> => {
-		const response = await fetch(
-			`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`,
-			{
-				method: "DELETE",
-				headers,
-			},
-		);
+		const { url, headers } = getConfig();
+		const response = await fetch(`${url}/rest/v1/products?id=eq.${id}`, {
+			method: "DELETE",
+			headers,
+		});
 		if (!response.ok) throw new Error("Failed to delete product");
 	},
 };
