@@ -31,7 +31,6 @@ export default function SignInPage() {
 
 	return (
 		<div className="min-h-screen bg-white flex flex-col">
-			{/* Top bar */}
 			<div className="border-b border-[#EBEBEB] px-6 py-5">
 				<div className="max-w-7xl mx-auto">
 					<h1 className="text-[#FF385C] text-2xl font-bold tracking-tight">
@@ -39,8 +38,6 @@ export default function SignInPage() {
 					</h1>
 				</div>
 			</div>
-
-			{/* Sign-in card */}
 			<main className="flex-1 flex items-center justify-center px-4 py-12">
 				<div className="w-full max-w-md">
 					<div className="border border-[#DDDDDD] rounded-xl shadow-[0_6px_20px_rgba(0,0,0,0.2)] p-8">
