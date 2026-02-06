@@ -19,19 +19,33 @@ export function Modal({
 	title,
 	className,
 }: ModalProps) {
+	const dialogRef = React.useRef<HTMLDivElement>(null);
+	const previousFocusRef = React.useRef<HTMLElement | null>(null);
+	const titleId = React.useId();
+
 	React.useEffect(() => {
 		const handleEscape = (e: KeyboardEvent) => {
 			if (e.key === "Escape") onClose();
 		};
 
 		if (isOpen) {
+			previousFocusRef.current = document.activeElement as HTMLElement;
+
 			document.addEventListener("keydown", handleEscape);
 			document.body.style.overflow = "hidden";
+
+			requestAnimationFrame(() => {
+				dialogRef.current?.focus();
+			});
 		}
 
 		return () => {
 			document.removeEventListener("keydown", handleEscape);
 			document.body.style.overflow = "unset";
+
+			if (previousFocusRef.current) {
+				previousFocusRef.current.focus();
+			}
 		};
 	}, [isOpen, onClose]);
 
@@ -39,35 +53,41 @@ export function Modal({
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center">
-			{/* Backdrop */}
 			<div
-				className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+				className="absolute inset-0 bg-black/40"
 				onClick={onClose}
+				aria-hidden="true"
 			/>
 
-			{/* Modal */}
 			<div
+				ref={dialogRef}
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby={title ? titleId : undefined}
+				tabIndex={-1}
 				className={cn(
-					"relative z-10 w-full max-w-lg mx-4  rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200",
+					"relative z-10 w-full max-w-lg mx-4 rounded-xl shadow-[0_6px_20px_rgba(0,0,0,0.2)] animate-in fade-in zoom-in duration-200 bg-white focus:outline-none",
 					className,
 				)}
 			>
-				{/* Header */}
 				{title && (
-					<div className="flex items-center justify-between px-6 py-4 border-b border-[#E7E2DC]">
-						<h2 className="text-xl font-semibold text-gray-900">
+					<div className="flex items-center justify-between px-6 py-5 border-b border-[#EBEBEB]">
+						<h2
+							id={titleId}
+							className="text-lg font-semibold text-[#222222]"
+						>
 							{title}
 						</h2>
 						<button
 							onClick={onClose}
-							className="text-gray-400 hover:text-gray-600 transition-colors"
+							aria-label="Close dialog"
+							className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#F7F7F7] transition-colors text-[#717171] hover:text-[#222222]"
 						>
-							<X className="w-5 h-5" />
+							<X className="w-4 h-4" aria-hidden="true" />
 						</button>
 					</div>
 				)}
 
-				{/* Content */}
 				<div className="p-6">{children}</div>
 			</div>
 		</div>
