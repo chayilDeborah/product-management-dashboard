@@ -21,6 +21,17 @@ export const categoriesApi = {
 		if (!response.ok) throw new Error("Failed to fetch categories");
 		return response.json();
 	},
+
+	create: async (data: { name: string; slug: string }): Promise<Category> => {
+		const response = await fetch(`${SUPABASE_URL}/rest/v1/categories`, {
+			method: "POST",
+			headers,
+			body: JSON.stringify({ ...data, status: "active" }),
+		});
+		if (!response.ok) throw new Error("Failed to create category");
+		const result = await response.json();
+		return result[0];
+	},
 };
 
 export const productsApi = {
