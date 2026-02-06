@@ -47,7 +47,7 @@ export const productsApi = {
 			url += `&name=ilike.*${params.search}*`;
 		}
 		if (params?.category) {
-			url += `&category=eq.${params.category}`;
+			url += `&category=ilike.*${params.category}*`;
 		}
 		if (params?.page && params?.limit) {
 			const offset = (params.page - 1) * params.limit;

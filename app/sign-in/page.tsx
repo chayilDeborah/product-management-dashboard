@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Lock } from "lucide-react";
 
 export default function SignInPage() {
 	const router = useRouter();
@@ -22,7 +21,7 @@ export default function SignInPage() {
 
 		try {
 			await signIn(email, password);
-			router.push("/");
+			router.push("/dashboard");
 		} catch {
 			setError("Invalid email or password");
 		} finally {
@@ -31,84 +30,97 @@ export default function SignInPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-[#E7E2DC] flex items-center justify-center px-4">
-			<div className="w-full max-w-md">
-				<div className="bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] p-8 border border-[#D6CEC2]">
-					<div className="text-center mb-8">
-						<div className="inline-flex items-center justify-center w-16 h-16 bg-[#B9AF9F] rounded-full mb-4">
-							<Lock className="w-8 h-8 text-white" />
-						</div>
-						<h1 className="text-3xl font-bold text-[#2B2B2B] mb-2">
-							Product Hub
-						</h1>
-						<p className="text-[#6B6B6B] text-sm">
-							Sign in to manage your inventory
-						</p>
-					</div>
-
-					<form onSubmit={handleSubmit} className="space-y-5">
-						{error && (
-							<div className="bg-red-50 border border-red-200 text-red-600 text-sm p-3 rounded-xl">
-								{error}
-							</div>
-						)}
-
-						<div>
-							<label
-								htmlFor="email"
-								className="block text-sm font-medium text-[#2B2B2B] mb-2"
-							>
-								Email
-							</label>
-							<Input
-								id="email"
-								type="email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								placeholder="productmgt@gmail.com"
-								className="h-12"
-								required
-							/>
-						</div>
-
-						<div>
-							<label
-								htmlFor="password"
-								className="block text-sm font-medium text-[#2B2B2B] mb-2"
-							>
-								Password
-							</label>
-							<Input
-								id="password"
-								type="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								placeholder="Enter your password"
-								className="h-12"
-								required
-							/>
-						</div>
-
-						<Button
-							type="submit"
-							className="w-full h-12 text-base"
-							disabled={loading}
-						>
-							{loading ? "Signing in..." : "Sign In"}
-						</Button>
-					</form>
-
-					<div className="mt-6 pt-6 border-t border-[#D6CEC2]">
-						<p className="text-center text-xs text-[#6B6B6B]">
-							Test credentials:
-							<br />
-							<span className="font-mono text-[#2B2B2B]">
-								productmgt@gmail.com / test123
-							</span>
-						</p>
-					</div>
+		<div className="min-h-screen bg-white flex flex-col">
+			{/* Top bar */}
+			<div className="border-b border-[#EBEBEB] px-6 py-5">
+				<div className="max-w-7xl mx-auto">
+					<h1 className="text-[#FF385C] text-2xl font-bold tracking-tight">
+						FashionHub
+					</h1>
 				</div>
 			</div>
+
+			{/* Sign-in card */}
+			<main className="flex-1 flex items-center justify-center px-4 py-12">
+				<div className="w-full max-w-md">
+					<div className="border border-[#DDDDDD] rounded-xl shadow-[0_6px_20px_rgba(0,0,0,0.2)] p-8">
+						<div className="text-center mb-8">
+							<h2 className="text-2xl font-semibold text-[#222222] mb-2">
+								Welcome back
+							</h2>
+							<p className="text-[#717171] text-sm">
+								Sign in to manage your product inventory
+							</p>
+						</div>
+
+						<form onSubmit={handleSubmit} className="space-y-5">
+							{error && (
+								<div
+									role="alert"
+									className="bg-[#FFF8F6] border border-[#C13515] text-[#C13515] text-sm p-3 rounded-lg"
+								>
+									{error}
+								</div>
+							)}
+
+							<div>
+								<label
+									htmlFor="email"
+									className="block text-sm font-medium text-[#222222] mb-2"
+								>
+									Email
+								</label>
+								<Input
+									id="email"
+									type="email"
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+									placeholder="Enter your email"
+									className="h-12"
+									required
+								/>
+							</div>
+
+							<div>
+								<label
+									htmlFor="password"
+									className="block text-sm font-medium text-[#222222] mb-2"
+								>
+									Password
+								</label>
+								<Input
+									id="password"
+									type="password"
+									value={password}
+									onChange={(e) =>
+										setPassword(e.target.value)
+									}
+									placeholder="Enter your password"
+									className="h-12"
+									required
+								/>
+							</div>
+
+							<Button
+								type="submit"
+								className="w-full h-12 text-base rounded-lg"
+								disabled={loading}
+							>
+								{loading ? "Signing in..." : "Continue"}
+							</Button>
+						</form>
+
+						<div className="mt-6 pt-6 border-t border-[#EBEBEB]">
+							<p className="text-center text-xs text-[#717171]">
+								Test credentials
+							</p>
+							<p className="text-center text-sm text-[#222222] font-medium mt-1">
+								productmgt@gmail.com · test123
+							</p>
+						</div>
+					</div>
+				</div>
+			</main>
 		</div>
 	);
 }
