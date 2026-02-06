@@ -3,7 +3,7 @@ import { Product, ProductFormData, Category } from "@/types/product";
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-const headers = {
+const headers: Record<string, string> = {
 	apikey: SUPABASE_KEY,
 	Authorization: `Bearer ${SUPABASE_KEY}`,
 	"Content-Type": "application/json",
@@ -34,13 +34,23 @@ export const categoriesApi = {
 	},
 };
 
+export interface PaginatedResponse<T> {
+	data: T[];
+	total: number;
+	page: number;
+	limit: number;
+	totalPages: number;
+}
+
 export const productsApi = {
 	getAll: async (params?: {
 		page?: number;
 		limit?: number;
 		search?: string;
 		category?: string;
-	}): Promise<Product[]> => {
+	}): Promise<PaginatedResponse<Product>> => {
+		const page = params?.page || 1;
+		const limit = params?.limit || 12;
 		let url = `${SUPABASE_URL}/rest/v1/products?select=*`;
 
 		if (params?.search) {
@@ -49,16 +59,35 @@ export const productsApi = {
 		if (params?.category) {
 			url += `&category=ilike.*${params.category}*`;
 		}
-		if (params?.page && params?.limit) {
-			const offset = (params.page - 1) * params.limit;
-			url += `&limit=${params.limit}&offset=${offset}`;
-		}
 
+		const offset = (page - 1) * limit;
+		url += `&limit=${limit}&offset=${offset}`;
 		url += `&order=created_at.desc`;
 
-		const response = await fetch(url, { headers });
+		const response = await fetch(url, {
+			headers: {
+				...headers,
+				Prefer: "count=exact",
+			},
+		});
 		if (!response.ok) throw new Error("Failed to fetch products");
-		return response.json();
+
+		const contentRange = response.headers.get("content-range");
+		let total = 0;
+		if (contentRange) {
+			const match = contentRange.match(/\/(\d+)/);
+			if (match) total = parseInt(match[1], 10);
+		}
+
+		const data: Product[] = await response.json();
+
+		return {
+			data,
+			total,
+			page,
+			limit,
+			totalPages: Math.ceil(total / limit),
+		};
 	},
 
 	getById: async (id: number): Promise<Product> => {

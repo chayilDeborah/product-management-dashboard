@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { productsApi, categoriesApi } from "@/lib/api/products";
-import { ProductFormData } from "@/types/product";
+import type { PaginatedResponse } from "@/lib/api/products";
+import { Product, ProductFormData } from "@/types/product";
 
 export function useCategories() {
 	return useQuery({
@@ -27,9 +28,10 @@ export function useProducts(params?: {
 	search?: string;
 	category?: string;
 }) {
-	return useQuery({
+	return useQuery<PaginatedResponse<Product>>({
 		queryKey: ["products", params],
 		queryFn: () => productsApi.getAll(params),
+		placeholderData: (previousData) => previousData,
 	});
 }
 

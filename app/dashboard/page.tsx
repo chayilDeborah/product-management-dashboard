@@ -2,7 +2,15 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Plus, Grid3x3, List, LogOut } from "lucide-react";
+import {
+	Search,
+	Plus,
+	Grid3x3,
+	List,
+	LogOut,
+	ChevronLeft,
+	ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProductCard } from "@/components/products/product-card";
@@ -31,6 +39,8 @@ export default function DashboardPage() {
 	const [selectedCategory, setSelectedCategory] = useState<
 		string | undefined
 	>();
+	const [currentPage, setCurrentPage] = useState(1);
+	const ITEMS_PER_PAGE = 12;
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const [isFormOpen, setIsFormOpen] = useState(false);
 	const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
@@ -46,15 +56,26 @@ export default function DashboardPage() {
 		}
 	}, [user, authLoading, router]);
 
+	// Reset page when filters change
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [debouncedSearch, selectedCategory]);
+
 	//queries
 	const {
-		data: products = [],
+		data: productsData,
 		isLoading,
 		isError,
 	} = useProducts({
 		search: debouncedSearch,
 		category: selectedCategory,
+		page: currentPage,
+		limit: ITEMS_PER_PAGE,
 	});
+
+	const products = productsData?.data ?? [];
+	const totalProducts = productsData?.total ?? 0;
+	const totalPages = productsData?.totalPages ?? 0;
 	const { data: categories = [] } = useCategories();
 
 	// mutations
@@ -213,8 +234,8 @@ export default function DashboardPage() {
 						Products
 					</h2>
 					<p className="text-[#717171] text-sm mt-1">
-						{products.length} product
-						{products.length !== 1 ? "s" : ""} in your inventory
+						{totalProducts} product
+						{totalProducts !== 1 ? "s" : ""} in your inventory
 					</p>
 				</div>
 
@@ -358,6 +379,112 @@ export default function DashboardPage() {
 							/>
 						))}
 					</div>
+				)}
+
+				{/* Pagination */}
+				{totalPages > 1 && (
+					<nav
+						aria-label="Pagination"
+						className="flex items-center justify-between mt-10 pt-6 border-t border-[#EBEBEB]"
+					>
+						<p className="text-sm text-[#717171]">
+							Showing{" "}
+							<span className="font-medium text-[#222222]">
+								{(currentPage - 1) * ITEMS_PER_PAGE + 1}
+							</span>{" "}
+							–{" "}
+							<span className="font-medium text-[#222222]">
+								{Math.min(
+									currentPage * ITEMS_PER_PAGE,
+									totalProducts,
+								)}
+							</span>{" "}
+							of{" "}
+							<span className="font-medium text-[#222222]">
+								{totalProducts}
+							</span>
+						</p>
+
+						<div className="flex items-center gap-1">
+							<button
+								onClick={() =>
+									setCurrentPage((p) => Math.max(1, p - 1))
+								}
+								disabled={currentPage === 1}
+								aria-label="Previous page"
+								className="p-2 rounded-lg border border-[#DDDDDD] text-[#222222] hover:bg-[#F7F7F7] transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
+							>
+								<ChevronLeft
+									className="w-4 h-4"
+									aria-hidden="true"
+								/>
+							</button>
+
+							{Array.from(
+								{ length: totalPages },
+								(_, i) => i + 1,
+							).map((pageNum) => {
+								// Show first, last, current, and adjacent pages
+								const showPage =
+									pageNum === 1 ||
+									pageNum === totalPages ||
+									Math.abs(pageNum - currentPage) <= 1;
+								const showEllipsis =
+									!showPage &&
+									(pageNum === 2 ||
+										pageNum === totalPages - 1);
+
+								if (showEllipsis) {
+									return (
+										<span
+											key={`ellipsis-${pageNum}`}
+											className="px-1 text-[#717171] text-sm"
+										>
+											…
+										</span>
+									);
+								}
+
+								if (!showPage) return null;
+
+								return (
+									<button
+										key={pageNum}
+										onClick={() => setCurrentPage(pageNum)}
+										aria-label={`Page ${pageNum}`}
+										aria-current={
+											currentPage === pageNum
+												? "page"
+												: undefined
+										}
+										className={`min-w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
+											currentPage === pageNum
+												? "bg-[#222222] text-white"
+												: "text-[#222222] hover:bg-[#F7F7F7] border border-[#DDDDDD]"
+										}`}
+									>
+										{pageNum}
+									</button>
+								);
+							})}
+
+							<button
+								onClick={() =>
+									setCurrentPage((p) =>
+										Math.min(totalPages, p + 1),
+									)
+								}
+								disabled={currentPage === totalPages}
+								aria-label="Next page"
+								className="p-2 rounded-lg border border-[#DDDDDD] text-[#222222] hover:bg-[#F7F7F7] transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
+							>
+								<ChevronRight
+									className="w-4 h-4"
+									aria-hidden="true"
+								/>
+							</button>
+						</div>
+					</nav>
 				)}
 			</main>
 
