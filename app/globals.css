@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* Custom animations */
 @keyframes fade-in {
 	from {
 		opacity: 0;
@@ -19,23 +18,47 @@
 	}
 }
 
+@keyframes slide-up {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
 .animate-in {
 	animation: fade-in 0.2s ease-out, zoom-in 0.2s ease-out;
 }
 
+.animate-slide-up {
+	animation: slide-up 0.3s ease-out;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-	width: 8px;
-	height: 8px;
+	width: 6px;
+	height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-	background: #1e293b;
+	background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #475569;
-	border-radius: 4px;
+	background: #DDDDDD;
+	border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #B0B0B0;
+}
+
+::selection {
+	background-color: #FF385C;
+	color: white;
 }
 
 ::-webkit-scrollbar-thumb:hover {
