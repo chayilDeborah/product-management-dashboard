@@ -26,116 +26,123 @@ export const ProductCard = memo(function ProductCard({
 				className="bg-white rounded-xl border border-[#EBEBEB] transition-all duration-200 hover:shadow-[0_6px_16px_rgba(0,0,0,0.12)] group"
 				aria-label={`Product: ${product.name}`}
 			>
-				<div className="flex items-center gap-5 p-4">
-					<div className="w-20 h-20 bg-[#F7F7F7] rounded-xl flex items-center justify-center shrink-0 overflow-hidden relative">
-						{product.image ? (
-							<Image
-								src={product.image}
-								alt={product.name}
-								fill
-								className="object-cover"
-								sizes="80px"
-							/>
-						) : (
-							<ImageOff
-								className="w-6 h-6 text-[#B0B0B0]"
-								aria-hidden="true"
-							/>
-						)}
+				<div className="flex flex-col sm:flex-row sm:items-center gap-4 p-4">
+					<div className="flex items-center gap-4 min-w-0">
+						<div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#F7F7F7] rounded-xl flex items-center justify-center shrink-0 overflow-hidden relative">
+							{product.image ? (
+								<Image
+									src={product.image}
+									alt={product.name}
+									fill
+									className="object-cover"
+									sizes="80px"
+								/>
+							) : (
+								<ImageOff
+									className="w-6 h-6 text-[#B0B0B0]"
+									aria-hidden="true"
+								/>
+							)}
+						</div>
+
+						<div className="flex-1 min-w-0">
+							<h3 className="text-[#222222] text-base font-semibold mb-1 truncate">
+								{product.name}
+							</h3>
+							<div className="flex items-center gap-2 mb-1">
+								<span className="text-[#717171] text-sm truncate">
+									{product.category || "Uncategorized"}
+								</span>
+								<span
+									className="text-[#DDDDDD]"
+									aria-hidden="true"
+								>
+									·
+								</span>
+								<span
+									className={`text-sm font-medium shrink-0 ${
+										product.status === "active"
+											? "text-[#008A05]"
+											: "text-[#717171]"
+									}`}
+								>
+									{product.status === "active"
+										? "Active"
+										: product.status}
+								</span>
+							</div>
+							{product.description && (
+								<p className="text-[#717171] text-sm line-clamp-1 hidden sm:block">
+									{product.description}
+								</p>
+							)}
+						</div>
 					</div>
 
-					<div className="flex-1 min-w-0">
-						<h3 className="text-[#222222] text-base font-semibold mb-1 truncate">
-							{product.name}
-						</h3>
-						<div className="flex items-center gap-2 mb-1">
-							<span className="text-[#717171] text-sm">
-								{product.category || "Uncategorized"}
-							</span>
-							<span className="text-[#DDDDDD]" aria-hidden="true">
-								·
-							</span>
-							<span
-								className={`text-sm font-medium ${
-									product.status === "active"
-										? "text-[#008A05]"
-										: "text-[#717171]"
-								}`}
+					<div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 shrink-0 pl-0 sm:pl-4">
+						<div className="flex items-center gap-4 sm:gap-6">
+							<div className="sm:text-right">
+								<p className="text-[#717171] text-xs mb-0.5">
+									Price
+								</p>
+								<p className="text-[#222222] text-base sm:text-lg font-semibold">
+									₦{product.price.toFixed(2)}
+								</p>
+							</div>
+							<div className="sm:text-right">
+								<p className="text-[#717171] text-xs mb-0.5">
+									Stock
+								</p>
+								<p
+									className={`text-base sm:text-lg font-semibold ${
+										product.stock > 10
+											? "text-[#008A05]"
+											: product.stock > 0
+												? "text-[#C13515]"
+												: "text-[#C13515]"
+									}`}
+								>
+									{product.stock}
+								</p>
+							</div>
+						</div>
+
+						<div
+							className="flex gap-1 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+							role="group"
+							aria-label={`Actions for ${product.name}`}
+						>
+							<button
+								onClick={() => onView?.(product)}
+								className="w-8 h-8 rounded-full hover:bg-[#F7F7F7] flex items-center justify-center transition-colors"
+								aria-label={`View details for ${product.name}`}
 							>
-								{product.status === "active"
-									? "Active"
-									: product.status}
-							</span>
-						</div>
-						{product.description && (
-							<p className="text-[#717171] text-sm line-clamp-1">
-								{product.description}
-							</p>
-						)}
-					</div>
-
-					<div className="flex items-center gap-6 shrink-0">
-						<div className="text-right">
-							<p className="text-[#717171] text-xs mb-0.5">
-								Price
-							</p>
-							<p className="text-[#222222] text-lg font-semibold">
-								₦{product.price.toFixed(2)}
-							</p>
-						</div>
-						<div className="text-right">
-							<p className="text-[#717171] text-xs mb-0.5">
-								Stock
-							</p>
-							<p
-								className={`text-lg font-semibold ${
-									product.stock > 10
-										? "text-[#008A05]"
-										: product.stock > 0
-											? "text-[#C13515]"
-											: "text-[#C13515]"
-								}`}
+								<Eye
+									className="w-4 h-4 text-[#222222]"
+									aria-hidden="true"
+								/>
+							</button>
+							<button
+								onClick={() => onEdit?.(product)}
+								className="w-8 h-8 rounded-full hover:bg-[#F7F7F7] flex items-center justify-center transition-colors"
+								aria-label={`Edit ${product.name}`}
 							>
-								{product.stock}
-							</p>
+								<Pencil
+									className="w-4 h-4 text-[#222222]"
+									aria-hidden="true"
+								/>
+							</button>
+							<button
+								onClick={() => onDelete?.(product)}
+								className="w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center transition-colors"
+								aria-label={`Delete ${product.name}`}
+							>
+								<Trash2
+									className="w-4 h-4 text-[#C13515]"
+									aria-hidden="true"
+								/>
+							</button>
 						</div>
-					</div>
-
-					<div
-						className="flex gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-						role="group"
-						aria-label={`Actions for ${product.name}`}
-					>
-						<button
-							onClick={() => onView?.(product)}
-							className="w-8 h-8 rounded-full hover:bg-[#F7F7F7] flex items-center justify-center transition-colors"
-							aria-label={`View details for ${product.name}`}
-						>
-							<Eye
-								className="w-4 h-4 text-[#222222]"
-								aria-hidden="true"
-							/>
-						</button>
-						<button
-							onClick={() => onEdit?.(product)}
-							className="w-8 h-8 rounded-full hover:bg-[#F7F7F7] flex items-center justify-center transition-colors"
-							aria-label={`Edit ${product.name}`}
-						>
-							<Pencil
-								className="w-4 h-4 text-[#222222]"
-								aria-hidden="true"
-							/>
-						</button>
-						<button
-							onClick={() => onDelete?.(product)}
-							className="w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center transition-colors"
-							aria-label={`Delete ${product.name}`}
-						>
-							<Trash2
-								className="w-4 h-4 text-[#C13515]"
-								aria-hidden="true"
-							/>
-						</button>
 					</div>
 				</div>
 			</article>

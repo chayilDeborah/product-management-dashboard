@@ -473,7 +473,7 @@ export function ProductForm({
 					<Button
 						type="submit"
 						disabled={isLoading}
-						className="flex-1"
+						className="flex-1 text-xs md:text-base"
 					>
 						{isLoading
 							? "Saving..."

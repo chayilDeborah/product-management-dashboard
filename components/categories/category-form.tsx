@@ -132,7 +132,7 @@ export function CategoryForm({
 					</Button>
 					<Button
 						type="submit"
-						className="flex-1"
+						className="flex-1 text-xs md:text-base"
 						disabled={isLoading}
 					>
 						{isLoading ? "Creating..." : "Create Category"}
