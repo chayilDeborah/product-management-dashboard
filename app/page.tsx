@@ -250,6 +250,17 @@ export default function Home() {
 				product={selectedProduct}
 				isLoading={createProduct.isPending || updateProduct.isPending}
 			/>
+
+			<DeleteConfirmation
+				isOpen={isDeleteOpen}
+				onClose={() => {
+					setIsDeleteOpen(false);
+					setSelectedProduct(null);
+				}}
+				onConfirm={handleConfirmDelete}
+				productName={selectedProduct?.name || ""}
+				isLoading={deleteProduct.isPending}
+			/>
 		</div>
 	);
 }
