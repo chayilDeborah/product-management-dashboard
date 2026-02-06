@@ -9,6 +9,18 @@ export function useCategories() {
 	});
 }
 
+export function useCreateCategory() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (data: { name: string; slug: string }) =>
+			categoriesApi.create(data),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["categories"] });
+		},
+	});
+}
+
 export function useProducts(params?: {
 	page?: number;
 	limit?: number;
