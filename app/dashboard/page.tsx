@@ -2,15 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import {
-	Search,
-	Plus,
-	Grid3x3,
-	List,
-	LogOut,
-	ChevronLeft,
-	ChevronRight,
-} from "lucide-react";
+import { Search, Plus, Grid3x3, List, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProductCard } from "@/components/products/product-card";
@@ -40,7 +32,7 @@ export default function DashboardPage() {
 		string | undefined
 	>();
 	const [currentPage, setCurrentPage] = useState(1);
-	const ITEMS_PER_PAGE = 12;
+	const ITEMS_PER_PAGE = 8;
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const [isFormOpen, setIsFormOpen] = useState(false);
 	const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
@@ -385,7 +377,7 @@ export default function DashboardPage() {
 				{totalPages > 1 && (
 					<nav
 						aria-label="Pagination"
-						className="flex items-center justify-between mt-10 pt-6 border-t border-[#EBEBEB]"
+						className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-10 pt-6 border-t border-[#EBEBEB]"
 					>
 						<p className="text-sm text-[#717171]">
 							Showing{" "}
@@ -405,68 +397,40 @@ export default function DashboardPage() {
 							</span>
 						</p>
 
-						<div className="flex items-center gap-1">
+						<div className="flex items-center gap-2">
 							<button
 								onClick={() =>
 									setCurrentPage((p) => Math.max(1, p - 1))
 								}
 								disabled={currentPage === 1}
 								aria-label="Previous page"
-								className="p-2 rounded-lg border border-[#DDDDDD] text-[#222222] hover:bg-[#F7F7F7] transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
+								className="px-3 py-2 rounded-lg border border-[#DDDDDD] text-sm text-[#222222] hover:bg-[#F7F7F7] transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
 							>
-								<ChevronLeft
-									className="w-4 h-4"
-									aria-hidden="true"
-								/>
+								Previous
 							</button>
 
 							{Array.from(
 								{ length: totalPages },
 								(_, i) => i + 1,
-							).map((pageNum) => {
-								// Show first, last, current, and adjacent pages
-								const showPage =
-									pageNum === 1 ||
-									pageNum === totalPages ||
-									Math.abs(pageNum - currentPage) <= 1;
-								const showEllipsis =
-									!showPage &&
-									(pageNum === 2 ||
-										pageNum === totalPages - 1);
-
-								if (showEllipsis) {
-									return (
-										<span
-											key={`ellipsis-${pageNum}`}
-											className="px-1 text-[#717171] text-sm"
-										>
-											…
-										</span>
-									);
-								}
-
-								if (!showPage) return null;
-
-								return (
-									<button
-										key={pageNum}
-										onClick={() => setCurrentPage(pageNum)}
-										aria-label={`Page ${pageNum}`}
-										aria-current={
-											currentPage === pageNum
-												? "page"
-												: undefined
-										}
-										className={`min-w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
-											currentPage === pageNum
-												? "bg-[#222222] text-white"
-												: "text-[#222222] hover:bg-[#F7F7F7] border border-[#DDDDDD]"
-										}`}
-									>
-										{pageNum}
-									</button>
-								);
-							})}
+							).map((pageNum) => (
+								<button
+									key={pageNum}
+									onClick={() => setCurrentPage(pageNum)}
+									aria-label={`Page ${pageNum}`}
+									aria-current={
+										currentPage === pageNum
+											? "page"
+											: undefined
+									}
+									className={`min-w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
+										currentPage === pageNum
+											? "bg-[#FF385C] text-white"
+											: "text-[#222222] hover:bg-[#F7F7F7] border border-[#DDDDDD]"
+									}`}
+								>
+									{pageNum}
+								</button>
+							))}
 
 							<button
 								onClick={() =>
@@ -476,12 +440,9 @@ export default function DashboardPage() {
 								}
 								disabled={currentPage === totalPages}
 								aria-label="Next page"
-								className="p-2 rounded-lg border border-[#DDDDDD] text-[#222222] hover:bg-[#F7F7F7] transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
+								className="px-3 py-2 rounded-lg border border-[#DDDDDD] text-sm text-[#222222] hover:bg-[#F7F7F7] transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
 							>
-								<ChevronRight
-									className="w-4 h-4"
-									aria-hidden="true"
-								/>
+								Next
 							</button>
 						</div>
 					</nav>
