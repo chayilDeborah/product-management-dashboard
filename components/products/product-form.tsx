@@ -43,7 +43,7 @@ export function ProductForm({
 		},
 	});
 
-	// Update form values when product changes
+	// update form values when product change
 	useEffect(() => {
 		if (product) {
 			reset({
@@ -86,7 +86,6 @@ export function ProductForm({
 			className="max-w-2xl"
 		>
 			<form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
-				{/* Product Name */}
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-1">
 						Product Name <span className="text-red-500">*</span>
@@ -102,8 +101,6 @@ export function ProductForm({
 						</p>
 					)}
 				</div>
-
-				{/* Description */}
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-1">
 						Description <span className="text-red-500">*</span>
@@ -120,8 +117,6 @@ export function ProductForm({
 						</p>
 					)}
 				</div>
-
-				{/* Price and Stock */}
 				<div className="grid grid-cols-2 gap-4">
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1">
@@ -159,7 +154,6 @@ export function ProductForm({
 					</div>
 				</div>
 
-				{/* Category and Status */}
 				<div className="grid grid-cols-2 gap-4">
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1">
@@ -193,8 +187,6 @@ export function ProductForm({
 						)}
 					</div>
 				</div>
-
-				{/* Image URL */}
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-1">
 						Image URL (optional)
@@ -211,8 +203,6 @@ export function ProductForm({
 						</p>
 					)}
 				</div>
-
-				{/* Actions */}
 				<div className="flex gap-3 pt-4">
 					<Button
 						type="button"

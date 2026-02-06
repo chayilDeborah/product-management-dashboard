@@ -22,12 +22,9 @@ export function ProductCard({
 		return (
 			<div className="bg-[#1E293B] rounded-2xl p-5 border border-[#334155] hover:border-[#475569] transition-all duration-200">
 				<div className="flex items-center gap-6">
-					{/* Product Image */}
-					<div className="w-24 h-24 bg-[#334155] rounded-2xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+					<div className="w-24 h-24 bg-[#334155] rounded-2xl flex items-center justify-center shrink-0 overflow-hidden">
 						{product.image}
 					</div>
-
-					{/* Product Info */}
 					<div className="flex-1 min-w-0">
 						<h3 className="text-white text-lg font-semibold mb-2 truncate">
 							{product.name}
@@ -52,9 +49,7 @@ export function ProductCard({
 							</p>
 						)}
 					</div>
-
-					{/* Price and Stock */}
-					<div className="flex items-center gap-8 flex-shrink-0">
+					<div className="flex items-center gap-8 shrink-0">
 						<div>
 							<p className="text-gray-400 text-xs mb-1">Price</p>
 							<p className="text-[#60A5FA] text-xl font-bold">
@@ -74,9 +69,7 @@ export function ProductCard({
 							</p>
 						</div>
 					</div>
-
-					{/* Action Buttons */}
-					<div className="flex gap-2 flex-shrink-0">
+					<div className="flex gap-2 shrink-0">
 						<button
 							onClick={() => onView?.(product)}
 							className="w-9 h-9 rounded-lg bg-[#1E40AF] hover:bg-[#1E3A8A] flex items-center justify-center transition-colors"
@@ -106,14 +99,10 @@ export function ProductCard({
 
 	return (
 		<div className="bg-[#1E293B] rounded-2xl p-5 border border-[#334155] hover:border-[#475569] transition-all duration-200">
-			{/* Top section: Icon and Actions */}
 			<div className="flex items-start justify-between mb-4">
-				{/* Product Image */}
 				<div className="w-20 h-20 bg-[#334155] rounded-2xl flex items-center justify-center overflow-hidden">
 					{product.image}
 				</div>
-
-				{/* Action Buttons */}
 				<div className="flex gap-2">
 					<button
 						onClick={() => onView?.(product)}
@@ -139,12 +128,9 @@ export function ProductCard({
 				</div>
 			</div>
 
-			{/* Product Name */}
 			<h3 className="text-white text-lg font-semibold mb-3 line-clamp-1">
 				{product.name}
 			</h3>
-
-			{/* Category and Status Badges */}
 			<div className="flex gap-2 mb-4">
 				<span className="px-3 py-1 bg-[#1E40AF] text-blue-200 text-xs font-medium rounded-md">
 					{product.category || "Uncategorized"}
@@ -159,8 +145,6 @@ export function ProductCard({
 					{product.status}
 				</span>
 			</div>
-
-			{/* Price and Stock */}
 			<div className="flex items-center justify-between pt-4 border-t border-[#334155]">
 				<div>
 					<p className="text-gray-400 text-xs mb-1">Price</p>
